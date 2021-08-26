@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <script src="https://www.gstatic.com/firebasejs/ui/4.8.0/firebase-ui-auth.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.0/firebase-ui-auth.css"/>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <title>紅贄祭</title>
+</head>
+
+<body>
+
+  <div id="firebaseui-auth-container"></div>
+
+  <h1>紅贄祭 掲示板</h1>
+  <!-- 入力場所を作成しよう -->
+
+  <form>
+    <fieldset>
+      <legend>血夜ッ吐</legend>
+      <div class="center">
+        怨名 ： <input type="text" id="name">
+      </div>
+      <div class="center">
+        瘴気 ： <input type="text" id="text">
+      </div>
+      <div>
+        <button type="button" id="send">顕現</button>
+      </div>
+    </fieldset>
+  </form>
+
+  <!-- データ出力場所 -->
+  <ul id="output"></ul>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- 以下にfirebaseのコードを貼り付けよう -->
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-auth.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use
+    https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "",
+    authDomain: "chatapp-ff898.firebaseapp.com",
+    projectId: "chatapp-ff898",
+    storageBucket: "chatapp-ff898.appspot.com",
+    messagingSenderId: "137216075468",
+    appId: "1:137216075468:web:15358b94983863c2138469"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+
+  <script>
+    // 日時をいい感じの形式にする関数
+    function convertFromFirestoreTimestampToDatetime(timestamp) {
+      const _d = timestamp ? new Date(timestamp * 1000) : new Date();
+      const Y = _d.getFullYear();
+      const m = (_d.getMonth() + 1).toString().padStart(2, '0');
+      const d = _d.getDate().toString().padStart(2, '0');
+      const H = _d.getHours().toString().padStart(2, '0');
+      const i = _d.getMinutes().toString().padStart(2, '0');
+      const s = _d.getSeconds().toString().padStart(2, '0');
+      return `${Y}/${m}/${d} ${H}:${i}:${s}`;
+    }
+
+    const db = firebase.firestore().collection('chat');
+
+    $('#send').on('click', function () {
+      const data = {
+  name: $('#name').val(),
+  text: $('#text').val(),
+  time: firebase.firestore.FieldValue.serverTimestamp(),
+};
+db.add(data);
+$('#text').val('');
+});
+
+db.orderBy("time","desc").onSnapshot(function(querySnapshot){
+  // オンラインにデータが追加や変更されたタイミングで"{}"内が実行される
+  console.log(querySnapshot.docs);
+  // 生データを扱いやすい形に変換する処理
+  const dataArray = [];
+querySnapshot.docs.forEach(function (doc) {
+  const data = {
+    id: doc.id,
+    data: doc.data(),
+  };
+  dataArray.push(data);
+});
+
+console.log(dataArray);
+// 扱いやすいデータからタグを生成する処理
+const tagArray = [];
+dataArray.forEach(function (data) {
+  tagArray.push(`
+    <div id="${data.id}" class=margin_bottom>
+      <p>${data.data.name} 　 ${convertFromFirestoreTimestampToDatetime(data.data.time?.seconds)} 　 ID:${data.id}</p>
+      <p>　${data.data.text}</p>
+    </div>
+  `);
+});
+// 画面にタグを出力する処理
+$('#output').html(tagArray);
+
+})
+
+$('#text').on('keydown', function (e) {
+  if (e.keyCode === 13) {
+    const data = {
+      name: $('#name').val(),
+      text: $('#text').val(),
+      time: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+    db.add(data);
+    $('#text').val('');
+  }
+});
+
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        // User is signed in.
+        console.log(user.uid);
+    } else {
+        // No user is signed in.
+    }
+});
+
+  </script>
+</body>
+
+</html>

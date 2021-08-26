@@ -1,0 +1,80 @@
+@font-face {
+    font-family: "isego"; 
+    src: url("../ttf/Isego.otf") format('truetype');
+}
+
+@font-face {
+    font-family: "isemin"; 
+    src: url("../ttf/Isemin.otf") format('truetype');
+}
+
+body{
+    background-color: black;
+    color: crimson;
+    font-family: "isemin";
+    src: url("../ttf/Isemin.otf");
+    background-image: url('../img/miko.jpg');
+    background-repeat: repeat-y;
+    background-size: 100% auto;
+}
+
+h1{
+    text-align: center;
+    font-size: 3.0rem;
+}
+
+form{
+    font-size: 1.2rem;
+    margin-bottom: 44px;
+    margin: 0 4% 40px;
+}
+
+fieldset{
+    position: relative;
+}
+
+input{
+    border-radius:3px;
+    height: 20px;
+}
+
+button{
+    min-width: 100px;
+    font-family: "isemin";
+    src: url("../ttf/Isemin.otf");
+    appearance: none;
+    border: 0;
+    border-radius: 30px;
+    background: crimson;
+    color: #fff;
+    margin-top: 10px;
+    padding: 4px 16px 6px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    position: absolute;
+    top: 14px;
+    left: 300px;
+}
+
+button:hover{
+    background: rgb(240, 8, 55);
+}
+
+ul{
+    font-family: "isego";
+    src: url("../ttf/Isego.otf");
+    color: white;
+    text-shadow:1px 1px 0 crimson, -1px -1px 0 crimson,
+    -1px 1px 0 crimson, 1px -1px 0 crimson,
+    0px 1px 0 crimson,  0 -1px 0 crimson,
+    -1px 0 0 crimson, 1px 0 0 crimson;
+}
+
+.margin_bottom{
+    margin-bottom: 33px;
+}
+
+.center{
+    display: flex;
+    margin: 5px 0;
+}

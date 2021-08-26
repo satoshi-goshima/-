@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script src="https://www.gstatic.com/firebasejs/ui/4.8.0/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.0/firebase-ui-auth.css"/>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-auth.js"></script>
+
+    <link rel="stylesheet" href="css/login_style.css">
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+    https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<script>
+      // Your web app's Firebase configuration
+var firebaseConfig = {
+    apiKey: "",
+    authDomain: "chatapp-ff898.firebaseapp.com",
+    projectId: "chatapp-ff898",
+    storageBucket: "chatapp-ff898.appspot.com",
+    messagingSenderId: "137216075468",
+    appId: "1:137216075468:web:15358b94983863c2138469"
+};
+      // Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+let uiConfig = {
+            callbacks: {
+                signInSuccessWithAuthResult: function () {
+                    console.log("ログイン成功")
+                    return true;
+                },
+            },
+            signInSuccessUrl:"index.html",
+            signInOptions: [
+                firebase.auth.EmailAuthProvider.PROVIDER_ID,
+                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+            ],
+        };
+
+let ui = new firebaseui.auth.AuthUI(firebase.auth());
+ui.start('#firebaseui-auth-container', uiConfig);
+</script>
+</head>
+<body>
+
+<div class="title-box">
+    <img src="img/ootsugunai.jpg" alt="ootugunai">
+    <div class="title_wrapper">
+        <p class="login_wel">welcome</p>
+        <p class="login_to">to</p>
+        <p class="login_dark">UNDER WORLD</p><br>
+        <div id="firebaseui-auth-container"></div>
+    </div>
+</div>
+
+</body>
+</html>
